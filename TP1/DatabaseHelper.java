@@ -183,14 +183,10 @@ public class DatabaseHelper {
 		} 
 	}
 	
-	// delete user method
-		public void deleteUser(String username) throws SQLException {
-		    String query = "DELETE FROM cse360users WHERE userName = ?";
-		    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-		        pstmt.setString(1, username);
-		        pstmt.executeUpdate();
-		    } 
-		}
-		
+	public ResultSet getAllUsers() throws SQLException{
+		String query = "SELECT userName, role FROM cse360users";
+		Statement stmt = connection.createStatement();
+		return stmt.executeQuery(query);
+	}
 
 }
