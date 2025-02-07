@@ -116,15 +116,28 @@ public class AdminHomePage {
         addUserButton.setOnAction(e -> {
             userList.getItems().add("New User");    //this code should change to invite new user rather than add
         });
+        
+        //add delete user functionality
+        
 
         /*deleteUserButton is an event handler that defines what happens when
         * deleteUserButton is clicked. It uses that 'e -> {...}' expression to
         * handle that event. Same concept applies to addUserButton
         */
         deleteUserButton.setOnAction(e -> {
-            String selectedUser = userList.getSelectionModel().getSelectedItem();   //deletes the user that is currently selected
-            if (selectedUser != null) {             //if a user is selected, it will go through the getItems
-                userList.getItems().remove(selectedUser);   //.getItems returns a list, in this case the userlist, and selects the selectedUser
+            String selectedItem = userList1.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                String username = selectedItem.substring( //creates a substring of the username from the userlist ListView
+                    selectedItem.indexOf(":") + 2, 
+                    selectedItem.indexOf("|") - 1  
+                ).trim(); //removes the spaces from the ends of the string
+                
+                try {
+                    database.deleteUser(username);
+                    userList1.getItems().remove(selectedItem);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -179,7 +192,7 @@ public class AdminHomePage {
         }
         
         return userList;
-    }
+    
 
     // Then in createUserManagementPane:
 
