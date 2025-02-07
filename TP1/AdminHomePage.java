@@ -81,7 +81,7 @@ public class AdminHomePage {
         
         // Temp-Password Tab
         Tab createPasswordTab = new Tab("Temporary Password");
-        createPasswordTab.setContent(createPasswordPane());
+        createPasswordTab.setContent(createPasswordPane(database));
         createPasswordTab.setClosable(false);
 
 
@@ -258,33 +258,38 @@ public class AdminHomePage {
 
 
 
-    private Pane createPasswordPane() {
+    private Pane createPasswordPane(DatabaseHelper database) {
         VBox passwordPane = new VBox(10);
         passwordPane.setStyle("-fx-padding: 90;");
 
+        TextField userField = new TextField();
+        userField.setPromptText("Enter username");
+        
 
-	     Label temp = new Label("");
-	      temp.setStyle("-fx-font-size: 14px; -fx-font-style: italic;");
-	    
-	    Button genTempPass = new Button("Generate Temporary Password");
-	    genTempPass.setOnAction(a -> {
-	        SecureRandom random = new SecureRandom();
-	        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()_-+={}[]|\\:;\"'<>,.?/";
-	        StringBuilder tempPass = new StringBuilder();
-	        
-	        tempPass.append("Bb0-"); // check all tests
-	        
-	        for (int i = 4; i < 8; i++) {
-	            tempPass.append(chars.charAt(random.nextInt(chars.length())));
-	        }
-	        
-	        temp.setText(tempPass.toString());
+        TextField temp = new TextField("");
+        temp.setEditable(false);
 
-	        
-	        	    });
-	    passwordPane.getChildren().addAll(genTempPass,temp);
-       
+        temp.setStyle("-fx-font-size: 14px; -fx-font-style: italic;");
+        
+        Button genTempPass = new Button("Generate Temp Password");
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()_-+={}[]|\\:;\"'<>,.?/";
+        genTempPass.setOnAction(a -> {
+            String username = userField.getText();
+            if (!username.isEmpty()) {
+                SecureRandom random = new SecureRandom();
+                StringBuilder tempPass = new StringBuilder("Bb0-");
+                for (int i = 4; i < 8; i++) {
+                    tempPass.append(chars.charAt(random.nextInt(chars.length())));
+                }
+                database.updatePassword(username, tempPass.toString());
+				temp.setText("Temp password: " + tempPass.toString());
+				
+		        temp.setText(tempPass.toString());
 
+            }
+        });
+        
+        passwordPane.getChildren().addAll(userField, genTempPass, temp);
         return passwordPane;
     }
 
