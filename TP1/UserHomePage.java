@@ -2,6 +2,7 @@ package application;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -29,9 +30,13 @@ public class UserHomePage {
             // Redirect to the login selection page
             new SetupLoginSelectionPage(new databasePart1.DatabaseHelper()).show(primaryStage);
         });
+        
+	    ChoiceBox<String> choice = new ChoiceBox<>();
+	    choice.getItems().add("Reviewer");
+	    choice.getItems().addAll("Student", "Teacher");
 
         // Add the new Label and Button to the layout
-        layout.getChildren().addAll(userLabel, logoutButton);
+        layout.getChildren().addAll(userLabel, logoutButton,choice);
 	    Scene userScene = new Scene(layout, 800, 400);
 
 	    // Set the scene to primary stage
