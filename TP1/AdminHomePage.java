@@ -30,6 +30,8 @@ public class AdminHomePage {
      * Displays the admin page in the provided primary stage.
      * @param primaryStage The primary stage where the scene will be displayed.
      */
+
+    private static final int TIME_EXPIRE = 20; // Code expires in 20 seconds
 	
     public void show(DatabaseHelper database, Stage primaryStage) {
     	
@@ -251,8 +253,8 @@ public class AdminHomePage {
         }
         
         return userList;
-    
-
+    }
+	
 
 
 
