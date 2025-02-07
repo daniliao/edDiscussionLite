@@ -11,6 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
 import databasePart1.*;
 
 
@@ -96,7 +99,8 @@ public class AdminHomePage {
     }
 
 
-
+    //USERS TAB: Gives admin access to view established users, along with functions such as
+    //seeing basic info (username, roles), adding new users and deleting users.
     private Pane createUserManagementPane(DatabaseHelper database) {
         VBox userManagementPane = new VBox(10);
         userManagementPane.setStyle("-fx-padding: 10;");
@@ -151,7 +155,7 @@ public class AdminHomePage {
     }
 
 
-
+    //CREATE ROLES TAB: allows admin to set and delete roles from established users
     private Pane createRolesPane() {
         VBox rolesPane = new VBox(10);
         rolesPane.setStyle("-fx-padding: 10;");
@@ -163,17 +167,72 @@ public class AdminHomePage {
     }
 
 
-
-    private Pane createInvitePane() {
+    //INVITE USERS TAB: allows admin to invite new users
+    private Pane createInvitePane(DatabaseHelper databaseHelper) {
+        
         VBox invitePane = new VBox(10);
         invitePane.setStyle("-fx-padding: 10;");
 
+        
+        // Label to display the title of the page
+        Label userLabel = new Label("Invite ");
+        //userLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        
+        // Button to generate the invitation code
+        Button showCodeButton = new Button("Generate Invitation Code");
+        
+        // Label to display the generated invitation code
+        Label inviteCodeLabel = new Label(""); ;
+        inviteCodeLabel.setStyle("-fx-font-size: 14px; -fx-font-style: italic;");
+        
+        // Label to display the timer
+        Label myTimer = new Label("");
+        myTimer.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        
+        showCodeButton.setOnAction(a -> {
+            // Generate the invitation code using the databaseHelper and set it to the label
+            String invitationCode = databaseHelper.generateInvitationCode();
+            inviteCodeLabel.setText(invitationCode);
 
-        //ADD FUNCTION HERE
+            // Start the countdown timer
+            startCountdown(myTimer);
+        });
+        
+
+        invitePane.getChildren().addAll(userLabel, showCodeButton, inviteCodeLabel, myTimer);
+
 
         return invitePane;
     }
-    
+
+	
+	//COUNTDOWN OBJECT, creates a countdown in which lets admin know when a code expires
+	private void startCountdown(Label myTimer) {
+        // Set the initial time remaining
+        int[] timeRemaining = {TIME_EXPIRE};
+
+        // Create a Timeline to update the timer every second
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            timeRemaining[0]--;
+
+            if (timeRemaining[0] >= 0) {
+                // Update the timer label
+                myTimer.setText("Code expires in: " + timeRemaining[0] + " seconds");
+            } 
+            else {
+                // Stop the timer and indicate the code has expired
+                myTimer.setText("Code expired!");
+                ((Timeline) event.getSource()).stop();
+            }
+        }));
+
+        // Set the timeline to run indefinitely until stopped
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+
+
     
     private ListView<String> fetchUserList(DatabaseHelper database) {
         ListView<String> userList = new ListView<>();
@@ -193,8 +252,6 @@ public class AdminHomePage {
         
         return userList;
     
-
-    // Then in createUserManagementPane:
 
 
 
