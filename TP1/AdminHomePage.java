@@ -73,7 +73,7 @@ public class AdminHomePage {
 
         // Inv-Users Tab
         Tab inviteUsersTab = new Tab("Invite Users");
-        inviteUsersTab.setContent(createInvitePane());
+        inviteUsersTab.setContent(createInvitePane(database));
         inviteUsersTab.setClosable(false);
 
         //Temp Password Logic 
@@ -170,7 +170,7 @@ public class AdminHomePage {
 
 
     //INVITE USERS TAB: allows admin to invite new users
-    private Pane createInvitePane(DatabaseHelper databaseHelper) {
+    private Pane createInvitePane(DatabaseHelper database) {
         
         VBox invitePane = new VBox(10);
         invitePane.setStyle("-fx-padding: 10;");
@@ -193,7 +193,7 @@ public class AdminHomePage {
         
         showCodeButton.setOnAction(a -> {
             // Generate the invitation code using the databaseHelper and set it to the label
-            String invitationCode = databaseHelper.generateInvitationCode();
+            String invitationCode = database.generateInvitationCode();
             inviteCodeLabel.setText(invitationCode);
 
             // Start the countdown timer
