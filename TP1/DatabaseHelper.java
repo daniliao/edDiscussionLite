@@ -79,6 +79,16 @@ public class DatabaseHelper {
 		}
 	}
 
+	// deletes user from database
+	public void deleteUser(String username) throws SQLException {
+	    String query = "DELETE FROM cse360users WHERE userName = ?";
+	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+	        pstmt.setString(1, username);
+	        pstmt.executeUpdate();
+	    }
+	}
+
+
 	// Validates a user's login credentials.
 	public boolean login(User user) throws SQLException {
 		String query = "SELECT * FROM cse360users WHERE userName = ? AND password = ? AND role = ?";
