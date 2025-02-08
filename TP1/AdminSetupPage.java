@@ -16,14 +16,11 @@ import databasePart1.*;
 public class AdminSetupPage {
 	
     private final DatabaseHelper databaseHelper;
-    private final boolean isFirstUser;
-    
-    public AdminSetupPage(DatabaseHelper databaseHelper, boolean isFirstUser) {
+
+    public AdminSetupPage(DatabaseHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
-        this.isFirstUser = isFirstUser;
     }
-    
-    
+
     public void show(Stage primaryStage) {
     	// Input fields for userName and password
         TextField userNameField = new TextField();
@@ -46,13 +43,9 @@ public class AdminSetupPage {
                 databaseHelper.register(user);
                 System.out.println("Administrator setup completed.");
                 
-                if (isFirstUser) {
-                	new UserLoginPage(databaseHelper).show(primaryStage);
-                } else {
                 // Navigate to the Welcome Login Page
                 new WelcomeLoginPage(databaseHelper).show(primaryStage,user);
-                }
-             } catch (SQLException e) {
+            } catch (SQLException e) {
                 System.err.println("Database error: " + e.getMessage());
                 e.printStackTrace();
             }
