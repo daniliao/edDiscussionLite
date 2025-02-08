@@ -46,6 +46,7 @@ public class UserLoginPage {
             String userName = userNameField.getText();
             String password = passwordField.getText();
             try {
+                databaseHelper.connectToDatabase();
             	 List<String> roleList = databaseHelper.getUserRoles(userName);
 
                  if (roleList != null && !roleList.isEmpty()) {
