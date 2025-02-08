@@ -10,11 +10,14 @@ DANIEL YI-CHIAN LIAO
 
 TODO: list of all the items placed in the repository (specified in this deliverables section) and how to access each
 
-Daniel New User (1): Added boolean ‘isFirstUser’ to FirstPage and AdminSetUp page for AdminSetUp page to direct re-login
-
-Daniel New User (4): //TODO
-
-Mohammed - Logout Feature: Added a logout button, fixed a database connection issue by updating the login function, and implemented a deleteUser function in the database file.
-
-
-
+.
+├── dir1
+│   ├── file11.ext
+│   └── file12.ext
+├── dir2
+│   ├── file21.ext
+│   ├── file22.ext
+│   └── file23.ext
+├── dir3
+├── file_in_root.ext
+└── README.md
