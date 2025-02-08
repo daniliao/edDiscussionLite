@@ -14,5 +14,7 @@ Daniel New User (1): Added boolean ‘isFirstUser’ to FirstPage and AdminSetUp
 
 Daniel New User (4): //TODO
 
+Mohammed - Logout Feature: Added a logout button, fixed a database connection issue by updating the login function, and implemented a deleteUser function in the database file.
+
 
 
