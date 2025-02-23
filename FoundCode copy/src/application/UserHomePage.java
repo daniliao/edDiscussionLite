@@ -31,12 +31,21 @@ public class UserHomePage {
             new SetupLoginSelectionPage(new databasePart1.DatabaseHelper()).show(primaryStage);
         });
         
+        Button discussionButton = new Button("Discussion");
+
+        // Action for the Log Out button
+        discussionButton.setOnAction(a -> {
+        	new DiscussionPage().show(primaryStage);
+        });
+        
+        
+        
 	    ChoiceBox<String> choice = new ChoiceBox<>();
 	    choice.getItems().add("Reviewer");
 	    choice.getItems().addAll("Student", "Teacher");
 
         // Add the new Label and Button to the layout
-        layout.getChildren().addAll(userLabel, logoutButton,choice);
+        layout.getChildren().addAll(userLabel, logoutButton, discussionButton, choice);
 	    Scene userScene = new Scene(layout, 800, 400);
 
 	    // Set the scene to primary stage
