@@ -138,7 +138,7 @@ public class DatabaseHelper {
 	    }
 	}
 	
-	// Retrieves the role of a user from the database using their UserName.
+	// Retrieves the role of a user
 	public List<String> getUserRoles(String userName) {
 	    List<String> roles = new ArrayList<>();
 	    String query = "SELECT role FROM cse360users WHERE userName = ?";
@@ -156,8 +156,6 @@ public class DatabaseHelper {
 	    }
 	    return roles;
 	}
-
-
 	
 	// Generates a new invitation code and inserts it into the database.
 	public String generateInvitationCode() {

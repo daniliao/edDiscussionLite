@@ -1,6 +1,7 @@
 package application;
 
 import javafx.scene.Scene;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -23,12 +24,18 @@ public class DiscussionPage {
         // Release: Javafx 2.2, Using JavaFX UI Controls: List View | JavaFX 2 Tutorials and Documentation. (2013). https://docs.oracle.com/javafx/2/ui_controls/list-view.htm (accessed February 10, 2025).
         questionInListView = new ListView<>(questionInList); 
         questionInListView.setPrefHeight(160);
+        // Leahy, P. (2019, July 3). JavaFX Textfield Overview. ThoughtCo. https://www.thoughtco.com/textfield-overview-2033936 
+        questionTextBox.setPromptText("Your question...");
         
         TextField answerTextBox = new TextField();
         // Release: Javafx 2.2, Using JavaFX UI Controls: List View | JavaFX 2 Tutorials and Documentation. (2013). https://docs.oracle.com/javafx/2/ui_controls/list-view.htm (accessed February 10, 2025).
         answerTreeView = new TreeView<>();
         answerTreeView.setPrefHeight(160);
-
+        // Leahy, P. (2019, July 3). JavaFX Textfield Overview. ThoughtCo. https://www.thoughtco.com/textfield-overview-2033936 
+        answerTextBox.setPromptText("Your answer...");
+        
+        TextField globalSearchTextBox = new TextField();
+        globalSearchTextBox.setPromptText("Global search...");
         
         Button addQuestionButton = new Button("Add");
         Button updateQuestionButton = new Button("Update");
@@ -39,52 +46,102 @@ public class DiscussionPage {
         Button addReplyButton = new Button("Add Reply");
         Button quesionSolvedButton = new Button("Mark as Solved");
         
+        
         // Label to display error messages for invalid input
-        Label errorLabel = new Label();
-        errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        Label errorLabelQuestion = new Label();
+        errorLabelQuestion.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+        
+        Label errorLabelAnswer = new Label();
+        errorLabelAnswer.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
 
         addQuestionButton.setOnAction(e -> {
-        	createOrUpdateQuestion(questionTextBox.getText(), true);
-        	errorLabel.setText("Quesion field is empty!");
+        	if (questionTextBox.getText().isEmpty()) {
+        		errorLabelQuestion.setText("Quesion field is empty!");
+        	} else {
+        		createOrUpdateQuestion(questionTextBox.getText(), true);
+        		errorLabelQuestion.setText("");
+        	}
+        	
         });
         	
         updateQuestionButton.setOnAction(e -> {
-        	createOrUpdateQuestion(questionTextBox.getText(), false);
-        	errorLabel.setText("Please select a quesion!");
+        	Question selected = getQuestion();
+        	if (selected != null) {
+        		createOrUpdateQuestion(questionTextBox.getText(), false);
+        		errorLabelQuestion.setText("");
+        	} else {
+        		errorLabelQuestion.setText("Please select a quesion!");
+        	}
+        	
         });
         
         deleteQuestionButton.setOnAction(e -> {
-        	deleteQuestion();
-        	errorLabel.setText("Please select an question to delete!");
+        	Question selected = getQuestion();
+        	if (selected != null) {
+        		deleteQuestion();
+        		errorLabelQuestion.setText("");
+        	} else {
+        		errorLabelQuestion.setText("Please select an question to delete!");
+        	}
         });
         
         addAnswerButton.setOnAction(e -> {
-        	creatOrUpdateAnswer(answerTextBox.getText(), true);
-        	updateTreeView(getQuestion());
-        	errorLabel.setText("Please select a quesion and type your answer in the answer field!");
+        	if (questionTextBox.getText().isEmpty()) {
+        		errorLabelAnswer.setText("Please select a quesion and type your answer in the answer field!");
+        	} else {
+        		creatOrUpdateAnswer(answerTextBox.getText(), true);
+        		errorLabelQuestion.setText("");
+        		updateTreeView(getQuestion());
+        	}
+        	
         });
         
         updateAnswerButton.setOnAction(e -> {
-        	creatOrUpdateAnswer(answerTextBox.getText(), false);
-        	errorLabel.setText("Please select an answer!");
+        	Answer selected = getAnswer();
+        	if (selected != null) {
+        		creatOrUpdateAnswer(answerTextBox.getText(), false);
+        		errorLabelAnswer.setText("");
+        	} else {
+        		errorLabelAnswer.setText("Please select an answer!");
+        	}
         });
         
         deleteAnswerButton.setOnAction(e -> {
-        	deleteAnswer();
-        	errorLabel.setText("Please select an answer to delete!");
+        	Answer selected = getAnswer();
+        	if (selected != null) {
+        		deleteAnswer();
+        		errorLabelAnswer.setText("");
+        	} else {
+        		errorLabelAnswer.setText("Please select an answer to delete!");
+        	}
         });
         
         quesionSolvedButton.setOnAction(e -> {
-        	solvedQuesion();
-        	errorLabel.setText("Please select an quesion to mark solved!");
+        	Question selected = getQuestion();
+        	if (selected != null) {
+        		solvedQuesion();
+        		errorLabelQuestion.setText("");
+        	} else {
+        		errorLabelQuestion.setText("Please select an quesion to mark solved!");
+        	}
         });
         
+        
         addReplyButton.setOnAction(e -> {
-            createOrUpdateReply(answerTextBox.getText(), true);
-            updateTreeView(getQuestion());
-            errorLabel.setText("Please select an answer to reply to!");
+        	if (answerTextBox.getText().isEmpty()) {
+        		errorLabelAnswer.setText("Please type your reply in the answer field!");
+        	} else {
+        		createOrUpdateReply(answerTextBox.getText(), true);
+        		errorLabelAnswer.setText("");
+                updateTreeView(getQuestion());
+        	}
         });
-
+        
+        globalSearchTextBox.textProperty().addListener((obs, oldVal, newVal) -> {
+        	initiatedGlobalSearch(newVal);
+        });
+        
+        
         questionInListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 questionTextBox.setText(newVal.getQuestionFromUser());
@@ -95,12 +152,13 @@ public class DiscussionPage {
             }
         });
 
-        // https://jenkov.com/tutorials/javafx/splitpane.html
+        // Jenkov, J. (n.d.-a). JavaFX Splitpane. Jenkov.com Tech & Media Labs - Resources for Developers, IT Architects and Technopreneurs. https://jenkov.com/tutorials/javafx/splitpane.html 
         SplitPane splitPane = new SplitPane();
 
-        VBox questionBox = new VBox(new Label("Questions"), questionTextBox, errorLabel, addQuestionButton, updateQuestionButton, deleteQuestionButton, quesionSolvedButton, questionInListView);
-        VBox answerBox = new VBox(new Label("Answers"), answerTextBox, errorLabel, addAnswerButton, updateAnswerButton, deleteAnswerButton, addReplyButton, answerTreeView);
+        VBox questionBox = new VBox(new Label("Questions"), globalSearchTextBox, questionTextBox, errorLabelQuestion, addQuestionButton, updateQuestionButton, deleteQuestionButton, quesionSolvedButton, questionInListView);
+        VBox answerBox = new VBox(new Label("Answers"), answerTextBox, errorLabelAnswer, addAnswerButton, updateAnswerButton, deleteAnswerButton, addReplyButton, answerTreeView);
 
+        // Jenkov, J. (n.d.-a). JavaFX Splitpane. Jenkov.com Tech & Media Labs - Resources for Developers, IT Architects and Technopreneurs. https://jenkov.com/tutorials/javafx/splitpane.html 
         splitPane.getItems().addAll(questionBox, answerBox);
 
         
@@ -120,12 +178,8 @@ public class DiscussionPage {
         return selectedItem != null ? selectedItem.getValue() : null;
     }
     
-    
+    // User story 1 and 5: Students to ask or update question
     private void createOrUpdateQuestion(String text, boolean newText) {
-        if (text.isEmpty()) {
-        	return;
-        }
-
         if (newText) {
             Question q = new Question(text);
             questionInList.add(q);
@@ -139,6 +193,7 @@ public class DiscussionPage {
         }
     }
 
+    // User story 2 and 5: Students to propose or update answer
     private void creatOrUpdateAnswer(String text, boolean newText) {
         if (text.isEmpty()) {
         	return;
@@ -159,7 +214,7 @@ public class DiscussionPage {
         }
     }
 
-
+    
     private void deleteQuestion() {
         Question selected = getQuestion();
         if (selected != null) {
@@ -183,6 +238,7 @@ public class DiscussionPage {
             TreeItem<Answer> parentItem = selectedItem.getParent();
             
             // D, J. (1962, January 1). How to update a TreeView in javafx with data from users. Stack Overflow. https://stackoverflow.com/questions/42284060/how-to-update-a-treeview-in-javafx-with-data-from-users 
+            
             // If selected item is a reply
             if (parentItem != null && parentItem != answerTreeView.getRoot()) {
                 Answer parentAnswer = parentItem.getValue();
@@ -195,6 +251,7 @@ public class DiscussionPage {
         }
     }
     
+    // User story 6: Students that posted the question to announce that a specific answer addressed the issue that prompted the initial question.
     private void solvedQuesion() {
     	Question selected = getQuestion();
     	if (selected != null) {
@@ -203,8 +260,8 @@ public class DiscussionPage {
     	}
     }
     
-    
-
+    	
+    // User story 4: Students to ask for or suggest clarifications. 
     private void createOrUpdateReply(String text, boolean newText) {
     	if (text.isEmpty()) {
         	return;
@@ -227,6 +284,7 @@ public class DiscussionPage {
         }
     }
     
+    // User story 3: Students to read proposed answers.
     private void updateTreeView(Question question) {
         TreeItem<Answer> root = new TreeItem<>();
         List<Answer> answers = questionAndAnswer.get(question);
@@ -248,5 +306,62 @@ public class DiscussionPage {
         answerTreeView.setRoot(root);
         answerTreeView.setShowRoot(false); 
     }
+    
+    private TreeItem<Answer> filterAnswer(Question question, String searchQuery) {
+        List<Answer> answers = questionAndAnswer.get(question);
+        TreeItem<Answer> root = new TreeItem<>();
+
+        // Drew B, CourageCourage, & garawaa. (1962, April 1). How to search javafx TreeView for next treeitem?. Stack Overflow. https://stackoverflow.com/questions/44088649/how-to-search-javafx-treeview-for-next-treeitem 
+        // HemantSHemantS, rlirli, & Matt Jennings (1959, August 1). How to implement filtering for treetableview. Stack Overflow. https://stackoverflow.com/questions/26072510/how-to-implement-filtering-for-treetableview 
+        if (answers != null) {
+            for (Answer answer : answers) {
+                if (matchesSearchQuery(answer, searchQuery)) {
+                    TreeItem<Answer> answerItem = new TreeItem<>(answer);
+                    root.getChildren().add(answerItem);
+
+                    for (Answer reply : answer.getReply()) {
+                        if (matchesSearchQuery(reply, searchQuery)) {
+                            TreeItem<Answer> replyItem = new TreeItem<>(reply);
+                            answerItem.getChildren().add(replyItem);
+                        }
+                    }
+                }
+            }
+        }
+        return root;
+    }
+
+    private boolean matchesSearchQuery(Answer answer, String searchQuery) {
+        return answer.getAnswerFromUser().toLowerCase().contains(searchQuery.toLowerCase());
+    }
+    
+    private void initiatedGlobalSearch(String searchQuery) {
+    	// HemantSHemantS, rlirli, & Matt Jennings (1959, August 1). How to implement filtering for treetableview. Stack Overflow. https://stackoverflow.com/questions/26072510/how-to-implement-filtering-for-treetableview 
+    	
+        // Filter questions based on the search query
+        FilteredList<Question> filteredQuestions = questionInList.filtered(question ->
+            question.getQuestionFromUser().toLowerCase().contains(searchQuery) ||
+            questionAndAnswer.get(question).stream().anyMatch(answer ->
+                answer.getAnswerFromUser().toLowerCase().contains(searchQuery) ||
+                answer.getReply().stream().anyMatch(reply ->
+                    reply.getAnswerFromUser().toLowerCase().contains(searchQuery)
+                )
+            )
+        );
+        questionInListView.setItems(filteredQuestions);
+
+        // Update the TreeView for the first matching question
+        if (!filteredQuestions.isEmpty()) {
+            Question firstMatchingQuestion = filteredQuestions.get(0);
+            TreeItem<Answer> filteredTree = filterAnswer(firstMatchingQuestion, searchQuery);
+            answerTreeView.setRoot(filteredTree);
+            answerTreeView.setShowRoot(false);
+        } else {
+            answerTreeView.setRoot(null);
+        }
+    }
+    
+
+
     
 }
