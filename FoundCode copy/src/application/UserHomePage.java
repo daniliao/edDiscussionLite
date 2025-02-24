@@ -1,5 +1,6 @@
 package application;
 
+import application.View.DiscussionPageView;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -35,7 +36,8 @@ public class UserHomePage {
 
         // Action for the Log Out button
         discussionButton.setOnAction(a -> {
-        	new DiscussionPage().show(primaryStage);
+        	DiscussionPageView discussionPageView = new DiscussionPageView();
+        	discussionPageView.show(primaryStage);
         });
         
         

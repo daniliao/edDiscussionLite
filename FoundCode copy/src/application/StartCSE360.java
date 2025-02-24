@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import java.sql.SQLException;
 
+import application.View.DiscussionPageView;
 import databasePart1.DatabaseHelper;
 
 
@@ -24,7 +25,8 @@ public class StartCSE360 extends Application {
             	
             	new FirstPage(databaseHelper).show(primaryStage);
             } else {
-            	new DiscussionPage().show(primaryStage);
+            	DiscussionPageView discussionPageView = new DiscussionPageView();
+            	discussionPageView.show(primaryStage);
             	// new SetupLoginSelectionPage(databaseHelper).show(primaryStage);
             }
         } catch (SQLException e) {
@@ -34,3 +36,4 @@ public class StartCSE360 extends Application {
 	
 
 }
+
