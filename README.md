@@ -8,7 +8,81 @@ Ricardo Guerrero,
 Cristian Holguin, 
 DANIEL YI-CHIAN LIAO
 
-<img width="320" alt="Screenshot 2025-02-08 at 12 59 53 AM" src="https://github.com/user-attachments/assets/830f734d-9bc8-4ce4-983e-7ac0d14ef55f" />
+```
+.
+├── FoundCode copy
+│   ├── bin
+│   │   ├── application
+│   │   │   ├── AdminHomePage.class
+│   │   │   ├── AdminSetupPage.class
+│   │   │   ├── FirstPage.class
+│   │   │   ├── InvitationPage.class
+│   │   │   ├── SetupAccountPage.class
+│   │   │   ├── SetupLoginSelectionPage.class
+│   │   │   ├── StartCSE360.class
+│   │   │   ├── User.class
+│   │   │   ├── UserHomePage.class
+│   │   │   ├── UserLoginPage.class
+│   │   │   ├── View
+│   │   │   │   └── DiscussionPageView.class
+│   │   │   ├── WelcomeLoginPage.class
+│   │   │   ├── model
+│   │   │   │   ├── Answer.class
+│   │   │   │   ├── Answers.class
+│   │   │   │   ├── Question.class
+│   │   │   │   └── Questions.class
+│   │   │   └── viewModel
+│   │   │       └── DiscussionPageViewModel.class
+│   │   ├── databasePart1
+│   │   │   └── DatabaseHelper.class
+│   │   └── module-info.class
+│   └── src
+│       ├── application
+│       │   ├── AdminHomePage.java
+│       │   ├── AdminSetupPage.java
+│       │   ├── FirstPage.java
+│       │   ├── InvitationPage.java
+│       │   ├── SetupAccountPage.java
+│       │   ├── SetupLoginSelectionPage.java
+│       │   ├── StartCSE360.java
+│       │   ├── User.java
+│       │   ├── UserHomePage.java
+│       │   ├── UserLoginPage.java
+│       │   ├── View
+│       │   │   └── DiscussionPageView.java
+│       │   ├── WelcomeLoginPage.java
+│       │   ├── model
+│       │   │   ├── Answer.java
+│       │   │   ├── Answers.java
+│       │   │   ├── Question.java
+│       │   │   └── Questions.java
+│       │   └── viewModel
+│       │       └── DiscussionPageViewModel.java
+│       ├── databasePart1
+│       │   └── DatabaseHelper.java
+│       └── module-info.java
+├── README.md
+├── automated tests vids
+│   ├── GMT20250208-022512_Recording_1440x900.mp4
+│   ├── Logout Functionality Test Cases(demo).mp4
+│   ├── Logout Functionality code explanation.mp4
+│   └── Matthew Cruz- screencast test for user roles and temp password.mp4
+└── old code
+    ├── AdminHomePage.java
+    ├── AdminSetupPage.java
+    ├── DatabaseHelper.java
+    ├── FirstPage.java
+    ├── InvitationPage.java
+    ├── SetupAccountPage.java
+    ├── SetupLoginSelectionPage.java
+    ├── StartCSE360.java
+    ├── User.java
+    ├── UserHomePage.java
+    ├── UserLoginPage.java
+    └── WelcomeLoginPage.java
+
+16 directories, 55 files
+```
 
 Screencast 1 https://www.youtube.com/watch?v=eAzt323uXoM&feature=youtu.be
 Screencast 2 https://youtu.be/2EsleRtOByE
