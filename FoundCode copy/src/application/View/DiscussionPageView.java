@@ -38,6 +38,19 @@ public class DiscussionPageView {
         Button deleteAnswerButton = new Button("Delete");
         Button addReplyButton = new Button("Add Reply");
         Button questionSolvedButton = new Button("Mark as Solved");
+        Button filterUnresolvedButton = new Button("Show Unresolved Questions");
+        Button showAllQuestionsButton = new Button("Show All Questions");
+
+        
+        filterUnresolvedButton.setOnAction(e -> {
+            FilteredList<Question> unresolvedQuestions = viewModel.getQuestionInList().filtered(question -> !question.isSolved());
+            questionInListView.setItems(unresolvedQuestions);
+        });
+
+        showAllQuestionsButton.setOnAction(e -> {
+            questionInListView.setItems(viewModel.getQuestionInList()); // Show all questions
+        });
+
 
         Label errorLabelQuestion = new Label();
         errorLabelQuestion.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
@@ -170,7 +183,8 @@ public class DiscussionPageView {
         // Jenkov, J. (n.d.-a). JavaFX Splitpane. Jenkov.com Tech & Media Labs - Resources for Developers, IT Architects and Technopreneurs. https://jenkov.com/tutorials/javafx/splitpane.html 
         SplitPane splitPane = new SplitPane();
         
-        VBox questionBox = new VBox(new Label("Questions"), globalSearchTextBox, questionTextBox, errorLabelQuestion, addQuestionButton, updateQuestionButton, deleteQuestionButton, questionSolvedButton, questionInListView);
+        VBox questionBox = new VBox(new Label("Questions"), globalSearchTextBox, questionTextBox, errorLabelQuestion, 
+        	    addQuestionButton, updateQuestionButton, deleteQuestionButton, questionSolvedButton, filterUnresolvedButton, showAllQuestionsButton, questionInListView);
         VBox answerBox = new VBox(new Label("Answers"), answerTextBox, errorLabelAnswer, addAnswerButton, updateAnswerButton, deleteAnswerButton, addReplyButton, answerTreeView);
         splitPane.getItems().addAll(questionBox, answerBox);
 
