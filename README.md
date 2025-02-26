@@ -50,6 +50,45 @@ https://youtu.be/mGmMfiUSbgQ
     }
 ```
 ### 3. Students to search for and read questions and proposed answers.
+
+Listens for user searches on search bar
+```java
+globalSearchTextBox.textProperty().addListener((obs, oldVal, newVal) -> {
+            FilteredList<Question> filteredQuestions = viewModel.initiatedGlobalSearch(newVal);
+            questionInListView.setItems(filteredQuestions);
+
+            if (!filteredQuestions.isEmpty()) {
+                Question firstMatchingQuestion = filteredQuestions.get(0);
+                TreeItem<Answer> filteredTree = filterAnswer(firstMatchingQuestion, newVal);
+                answerTreeView.setRoot(filteredTree);
+                answerTreeView.setShowRoot(false);
+            } else {
+                answerTreeView.setRoot(null);
+            }
+        });
+```
+
+initiatedGlobalSearch(String searchQuery) filters questionInList based on the user's search query. It checks:
+
+1. If the question itself (from question.getQuestionFromUser()) contains the searchQuery.
+
+2. If any of the answers associated with the question contain the searchQuery
+```java
+public FilteredList<Question> initiatedGlobalSearch(String searchQuery) {
+        return questionInList.filtered(question ->
+            question.getQuestionFromUser().toLowerCase().contains(searchQuery.toLowerCase()) || questionAndAnswer.get(question).stream().anyMatch(answer -> answer.getAnswerFromUser().toLowerCase().contains(searchQuery.toLowerCase()) || matchReply(answer, searchQuery))
+        );
+    }
+```
+
+filterAnswer(Question question, String searchQuery) 
+
+1. Loops through all answers associated with the given question.
+
+2. If an answer contains the searchQuery, it is added to the tree we created.
+
+3. If a reply to an answer also contains the searchQuery, it is added as a child of the answer.
+
 ```java
     // Sshahine. (n.d.). JFoenix/demo/src/main/java/demos/components/treeviewdemo.java at master · SSHAHINE/JFOENIX. GitHub. https://github.com/sshahine/JFoenix/blob/master/demo/src/main/java/demos/components/TreeViewDemo.java 
     private TreeItem<Answer> filterAnswer(Question question, String searchQuery) {
@@ -73,21 +112,7 @@ https://youtu.be/mGmMfiUSbgQ
     }
 ```
 
-```java
-globalSearchTextBox.textProperty().addListener((obs, oldVal, newVal) -> {
-            FilteredList<Question> filteredQuestions = viewModel.initiatedGlobalSearch(newVal);
-            questionInListView.setItems(filteredQuestions);
 
-            if (!filteredQuestions.isEmpty()) {
-                Question firstMatchingQuestion = filteredQuestions.get(0);
-                TreeItem<Answer> filteredTree = filterAnswer(firstMatchingQuestion, newVal);
-                answerTreeView.setRoot(filteredTree);
-                answerTreeView.setShowRoot(false);
-            } else {
-                answerTreeView.setRoot(null);
-            }
-        });
-```
 ### 4. Students to ask for or suggest clarifications. 
 ```java
 // User story 4: Students to ask for or suggest clarifications.
