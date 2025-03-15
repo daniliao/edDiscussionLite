@@ -1,24 +1,18 @@
-# CSE360 Team Project | Wednesday 48
+# CSE360 Individual Homework 3
 
-Team Member: 
-Mohammed Almakki, 
-Matthew Cruz, 
-Octavian Englund, 
-Ricardo Guerrero, 
-Cristian Holguin, 
 DANIEL YI-CHIAN LIAO
-
-## Team project 2 user stories
 
 ![Demo!](https://github.com/user-attachments/assets/acede184-16b8-4684-813c-9ccfb13b2e36)
 
-### Video explains the code: 
+### Video explains the JUnit Tests: 
 
-https://youtu.be/87m6e5gmCIk
+https://youtu.be/O4hEGBCX0_8
 
-### Video on how each requirement is satisfied: 
+### [Go to Tests](https://github.com/daniliao/edDiscussionLite/blob/2a11b36e5ad4ea1b86975c636dfe71c744e4e600/FoundCode%20copy/src/test/DiscussionPageTests.java)
 
-https://youtu.be/mGmMfiUSbgQ
+
+
+
 
 ### 1. Students to ask questions and 5. Students to update questions or answers.
 ```java
