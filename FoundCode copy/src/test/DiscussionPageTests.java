@@ -509,7 +509,7 @@ public class DiscussionPageTests {
 
         assertFalse(ans.getReply()
                 .stream().anyMatch(r -> r.getAnswerFromUser().contains("oi7")));
-	}
+	} 
 }
 
 
